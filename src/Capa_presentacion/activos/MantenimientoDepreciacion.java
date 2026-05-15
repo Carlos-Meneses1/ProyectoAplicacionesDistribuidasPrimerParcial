@@ -1,0 +1,657 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package Capa_presentacion.activos;
+
+import Capa_negocio.NegocioDepreciacion;
+import Capa_persistencia.Activo;
+import Capa_persistencia.CabDepreciacion;
+import Capa_persistencia.DetDepreciacion;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
+/**
+ *
+ * @author pc
+ */
+public class MantenimientoDepreciacion extends javax.swing.JFrame {
+
+    NegocioDepreciacion negocio = new NegocioDepreciacion();
+
+    /**
+     * Creates new form MantenimientoDepreciacion
+     */
+    public MantenimientoDepreciacion() {
+        initComponents();
+        setLocationRelativeTo(null);
+        txtNumero.setEditable(false);
+        nuevo();
+        cargarCabeceras();
+    }
+
+    private void nuevo() {
+        txtNumero.setText(negocio.siguienteNumero());
+
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        txtFecha.setText(sdf.format(new Date()));
+
+        txtObservaciones.setText("");
+        txtResponsable.setText("");
+
+        limpiarDetalle();
+
+        txtResponsable.requestFocus();
+    }
+
+    private void limpiarDetalle() {
+        DefaultTableModel modelo = new DefaultTableModel();
+        modelo.addColumn("ID Det");
+        modelo.addColumn("ID Activo");
+        modelo.addColumn("Activo");
+        modelo.addColumn("Periodo");
+        modelo.addColumn("Valor depreciación");
+
+        tblDetalle.setModel(modelo);
+    }
+
+    private void cargarCabeceras() {
+        DefaultTableModel modelo = new DefaultTableModel();
+        modelo.addColumn("Número");
+        modelo.addColumn("Fecha");
+        modelo.addColumn("Observaciones");
+        modelo.addColumn("Responsable");
+
+        List<CabDepreciacion> lista = negocio.listarCabeceras();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+
+        if (lista != null) {
+            for (CabDepreciacion c : lista) {
+                String fecha = "";
+
+                if (c.getFecha() != null) {
+                    fecha = sdf.format(c.getFecha());
+                }
+
+                modelo.addRow(new Object[]{
+                    c.getNumero(),
+                    fecha,
+                    c.getObservaciones(),
+                    c.getResponsable()
+                });
+            }
+        }
+
+        jTable2.setModel(modelo);
+    }
+
+    private boolean validarCabecera() {
+        if (txtFecha.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Ingrese la fecha");
+            txtFecha.requestFocus();
+            return false;
+        }
+
+        if (txtResponsable.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Ingrese el responsable");
+            txtResponsable.requestFocus();
+            return false;
+        }
+
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            sdf.setLenient(false);
+            sdf.parse(txtFecha.getText().trim());
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "La fecha debe tener formato dd/MM/yyyy");
+            txtFecha.requestFocus();
+            return false;
+        }
+
+        return true;
+    }
+
+    private Date obtenerFecha() throws Exception {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        sdf.setLenient(false);
+        return sdf.parse(txtFecha.getText().trim());
+    }
+
+    private void cargarDetalles(String numero) {
+        DefaultTableModel modelo = new DefaultTableModel();
+        modelo.addColumn("ID Det");
+        modelo.addColumn("ID Activo");
+        modelo.addColumn("Activo");
+        modelo.addColumn("Periodo");
+        modelo.addColumn("Valor depreciación");
+
+        List<DetDepreciacion> lista = negocio.listarDetalles(numero);
+
+        if (lista != null) {
+            for (DetDepreciacion d : lista) {
+                String idActivo = "";
+                String nombreActivo = "";
+
+                if (d.getIdActivo() != null) {
+                    idActivo = d.getIdActivo().getId();
+                    nombreActivo = d.getIdActivo().getNombre();
+                }
+
+                modelo.addRow(new Object[]{
+                    d.getIdDet(),
+                    idActivo,
+                    nombreActivo,
+                    d.getNroPeriodo(),
+                    d.getValorDepreciacion()
+                });
+            }
+        }
+
+        tblDetalle.setModel(modelo);
+    }
+
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        btnNuevo = new javax.swing.JButton();
+        btnDepreciar = new javax.swing.JButton();
+        btnGuardar = new javax.swing.JButton();
+        btnBuscar = new javax.swing.JButton();
+        btnEliminar = new javax.swing.JButton();
+        txtNumero = new javax.swing.JTextField();
+        txtFecha = new javax.swing.JTextField();
+        txtObservaciones = new javax.swing.JTextField();
+        txtResponsable = new javax.swing.JTextField();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblDetalle = new javax.swing.JTable();
+        tblCabecera = new javax.swing.JScrollPane();
+        jTable2 = new javax.swing.JTable();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 48)); // NOI18N
+        jLabel1.setText("Registro de depreciación");
+
+        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        jLabel2.setText("Número:");
+
+        jLabel3.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        jLabel3.setText("Fecha:");
+
+        jLabel4.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        jLabel4.setText("Observaciones:");
+
+        jLabel5.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        jLabel5.setText("Responsable:");
+
+        btnNuevo.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        btnNuevo.setText("Nuevo");
+        btnNuevo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNuevoActionPerformed(evt);
+            }
+        });
+
+        btnDepreciar.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        btnDepreciar.setText("Depreciar activos");
+        btnDepreciar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDepreciarActionPerformed(evt);
+            }
+        });
+
+        btnGuardar.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        btnGuardar.setText("Guardar");
+        btnGuardar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGuardarActionPerformed(evt);
+            }
+        });
+
+        btnBuscar.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        btnBuscar.setText("Buscar");
+        btnBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarActionPerformed(evt);
+            }
+        });
+
+        btnEliminar.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        btnEliminar.setText("Eliminar");
+        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarActionPerformed(evt);
+            }
+        });
+
+        txtNumero.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        txtNumero.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtNumeroActionPerformed(evt);
+            }
+        });
+
+        txtFecha.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        txtFecha.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtFechaActionPerformed(evt);
+            }
+        });
+
+        txtObservaciones.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        txtObservaciones.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtObservacionesActionPerformed(evt);
+            }
+        });
+
+        txtResponsable.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        txtResponsable.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtResponsableActionPerformed(evt);
+            }
+        });
+
+        tblDetalle.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        tblDetalle.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblDetalleMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(tblDetalle);
+
+        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jTable2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable2MouseClicked(evt);
+            }
+        });
+        tblCabecera.setViewportView(jTable2);
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(51, 51, 51)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(btnNuevo)
+                                .addGap(29, 29, 29)
+                                .addComponent(btnDepreciar)
+                                .addGap(36, 36, 36)
+                                .addComponent(btnGuardar)
+                                .addGap(44, 44, 44)
+                                .addComponent(btnBuscar)
+                                .addGap(47, 47, 47)
+                                .addComponent(btnEliminar))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 845, Short.MAX_VALUE)
+                                .addComponent(tblCabecera, javax.swing.GroupLayout.Alignment.LEADING))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(260, 260, 260)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel4))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(txtNumero, javax.swing.GroupLayout.DEFAULT_SIZE, 242, Short.MAX_VALUE)
+                                    .addComponent(txtFecha))
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addComponent(txtResponsable)
+                            .addComponent(txtObservaciones))))
+                .addGap(91, 91, 91))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 623, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(171, 171, 171))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1)
+                .addGap(48, 48, 48)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(txtNumero, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(txtFecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(txtObservaciones, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(txtResponsable, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(42, 42, 42)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnNuevo)
+                    .addComponent(btnDepreciar)
+                    .addComponent(btnGuardar)
+                    .addComponent(btnBuscar)
+                    .addComponent(btnEliminar))
+                .addGap(32, 32, 32)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(40, 40, 40)
+                .addComponent(tblCabecera, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(79, Short.MAX_VALUE))
+        );
+
+        pack();
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void txtNumeroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNumeroActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtNumeroActionPerformed
+
+    private void txtFechaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFechaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtFechaActionPerformed
+
+    private void txtObservacionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtObservacionesActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtObservacionesActionPerformed
+
+    private void txtResponsableActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtResponsableActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtResponsableActionPerformed
+
+    private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
+        // TODO add your handling code here:
+        nuevo();
+    }//GEN-LAST:event_btnNuevoActionPerformed
+
+    private void btnDepreciarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDepreciarActionPerformed
+        // TODO add your handling code here:
+        DefaultTableModel modelo = new DefaultTableModel();
+        modelo.addColumn("ID Det");
+        modelo.addColumn("ID Activo");
+        modelo.addColumn("Activo");
+        modelo.addColumn("Periodo");
+        modelo.addColumn("Valor depreciación");
+
+        List<Activo> activos = negocio.listarActivos();
+
+        if (activos == null || activos.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "No existen activos registrados");
+            return;
+        }
+
+        BigDecimal idDet = negocio.siguienteIdDet();
+
+        for (Activo a : activos) {
+            if (a.getValorCompra() != null && a.getPeriodosDepreciacion() != null) {
+
+                if (a.getPeriodosDepreciacion().intValue() > 0) {
+                    BigDecimal valor = a.getValorCompra().divide(
+                            new BigDecimal(a.getPeriodosDepreciacion()),
+                            2,
+                            BigDecimal.ROUND_HALF_UP
+                    );
+
+                    int periodo = negocio.siguientePeriodoActivo(a.getId());
+
+                    modelo.addRow(new Object[]{
+                        idDet,
+                        a.getId(),
+                        a.getNombre(),
+                        periodo,
+                        valor
+                    });
+
+                    idDet = idDet.add(BigDecimal.ONE);
+                }
+            }
+        }
+
+        tblDetalle.setModel(modelo);
+    }//GEN-LAST:event_btnDepreciarActionPerformed
+
+    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
+        // TODO add your handling code here:
+        if (!validarCabecera()) {
+            return;
+        }
+
+        if (tblDetalle.getRowCount() == 0) {
+            JOptionPane.showMessageDialog(this, "Primero debe depreciar los activos");
+            return;
+        }
+
+        try {
+            List<DetDepreciacion> detalles = new ArrayList<DetDepreciacion>();
+
+            for (int i = 0; i < tblDetalle.getRowCount(); i++) {
+                BigDecimal idDet = new BigDecimal(tblDetalle.getValueAt(i, 0).toString());
+                String idActivo = tblDetalle.getValueAt(i, 1).toString();
+                BigInteger periodo = new BigInteger(tblDetalle.getValueAt(i, 3).toString());
+                BigDecimal valor = new BigDecimal(tblDetalle.getValueAt(i, 4).toString());
+
+                Activo activo = negocio.buscarActivo(idActivo);
+
+                DetDepreciacion det = new DetDepreciacion();
+                det.setIdDet(idDet);
+                det.setIdActivo(activo);
+                det.setNroPeriodo(periodo);
+                det.setValorDepreciacion(valor);
+
+                detalles.add(det);
+            }
+
+            int r = negocio.guardarCabeceraDetalle(
+                    txtNumero.getText(),
+                    obtenerFecha(),
+                    txtObservaciones.getText().trim(),
+                    txtResponsable.getText().trim(),
+                    detalles
+            );
+
+            if (r == 1) {
+                JOptionPane.showMessageDialog(this, "Depreciación guardada correctamente y comprobante contable generado");
+                cargarCabeceras();
+                nuevo();
+            } else if (r == -2) {
+                JOptionPane.showMessageDialog(this, "No se pudo guardar. Revise que existan las cuentas: Gasto depreciación y Depreciación acumulada");
+            } else {
+                JOptionPane.showMessageDialog(this, "Error al guardar la depreciación");
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
+        }
+    }//GEN-LAST:event_btnGuardarActionPerformed
+
+    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
+        // TODO add your handling code here:
+        String numero = JOptionPane.showInputDialog(this, "Ingrese el número de depreciación:");
+
+        if (numero != null && !numero.trim().isEmpty()) {
+            CabDepreciacion c = negocio.buscarCabecera(numero.trim());
+
+            if (c != null) {
+                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+
+                txtNumero.setText(c.getNumero());
+
+                if (c.getFecha() != null) {
+                    txtFecha.setText(sdf.format(c.getFecha()));
+                } else {
+                    txtFecha.setText("");
+                }
+
+                txtObservaciones.setText(c.getObservaciones());
+                txtResponsable.setText(c.getResponsable());
+
+                cargarDetalles(c.getNumero());
+
+            } else {
+                JOptionPane.showMessageDialog(this, "No existe la depreciación");
+            }
+        }
+    }//GEN-LAST:event_btnBuscarActionPerformed
+
+    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+        // TODO add your handling code here:
+        String numero = txtNumero.getText().trim();
+
+        if (numero.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Seleccione o busque una depreciación");
+            return;
+        }
+
+        int opcion = JOptionPane.showConfirmDialog(
+                this,
+                "¿Seguro que desea eliminar esta depreciación?",
+                "Confirmar",
+                JOptionPane.YES_NO_OPTION
+        );
+
+        if (opcion == JOptionPane.YES_OPTION) {
+            int r = negocio.eliminarCabecera(numero);
+
+            if (r == 1) {
+                JOptionPane.showMessageDialog(this, "Depreciación eliminada correctamente");
+                cargarCabeceras();
+                nuevo();
+            } else {
+                JOptionPane.showMessageDialog(this, "No se pudo eliminar");
+            }
+        }
+    }//GEN-LAST:event_btnEliminarActionPerformed
+
+    private void tblDetalleMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblDetalleMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tblDetalleMouseClicked
+
+    private void jTable2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable2MouseClicked
+        // TODO add your handling code here:
+        int fila = jTable2.getSelectedRow();
+
+        if (fila >= 0) {
+            String numero = jTable2.getValueAt(fila, 0).toString();
+
+            CabDepreciacion c = negocio.buscarCabecera(numero);
+
+            if (c != null) {
+                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+
+                txtNumero.setText(c.getNumero());
+
+                if (c.getFecha() != null) {
+                    txtFecha.setText(sdf.format(c.getFecha()));
+                } else {
+                    txtFecha.setText("");
+                }
+
+                txtObservaciones.setText(c.getObservaciones());
+                txtResponsable.setText(c.getResponsable());
+
+                cargarDetalles(c.getNumero());
+            }
+        }
+    }//GEN-LAST:event_jTable2MouseClicked
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(MantenimientoDepreciacion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(MantenimientoDepreciacion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(MantenimientoDepreciacion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(MantenimientoDepreciacion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new MantenimientoDepreciacion().setVisible(true);
+            }
+        });
+    }
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnBuscar;
+    private javax.swing.JButton btnDepreciar;
+    private javax.swing.JButton btnEliminar;
+    private javax.swing.JButton btnGuardar;
+    private javax.swing.JButton btnNuevo;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable jTable2;
+    private javax.swing.JScrollPane tblCabecera;
+    private javax.swing.JTable tblDetalle;
+    private javax.swing.JTextField txtFecha;
+    private javax.swing.JTextField txtNumero;
+    private javax.swing.JTextField txtObservaciones;
+    private javax.swing.JTextField txtResponsable;
+    // End of variables declaration//GEN-END:variables
+}
