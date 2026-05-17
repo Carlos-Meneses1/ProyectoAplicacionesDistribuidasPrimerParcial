@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 package Capa_presentacion.menus;
-
+import Capa_presentacion.CreateAccount;
 /**
  *
  * @author pc
@@ -14,8 +14,26 @@ public class Menu extends javax.swing.JFrame {
     /**
      * Creates new form Menu
      */
+  
+ private String usuarioActual;
+
     public Menu() {
         initComponents();
+        setLocationRelativeTo(null);
+        btnUsuarios.setVisible(false);
+    }
+
+    public Menu(String usuario) {
+        initComponents();
+        setLocationRelativeTo(null);
+
+        this.usuarioActual = usuario;
+
+        if ("admin".equalsIgnoreCase(usuarioActual)) {
+            btnUsuarios.setVisible(true);
+        } else {
+            btnUsuarios.setVisible(false);
+        }
     }
 
     /**
@@ -32,8 +50,9 @@ public class Menu extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         Biblioteca_BTN = new javax.swing.JButton();
         Contabilidad_BTN = new javax.swing.JButton();
+        btnUsuarios = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         Mantenimiento_BTN.setFont(new java.awt.Font("Tahoma", 0, 48)); // NOI18N
         Mantenimiento_BTN.setText("Mantenimiento");
@@ -70,6 +89,14 @@ public class Menu extends javax.swing.JFrame {
             }
         });
 
+        btnUsuarios.setFont(new java.awt.Font("Tahoma", 0, 48)); // NOI18N
+        btnUsuarios.setText("Administración de usuarios");
+        btnUsuarios.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUsuariosActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -82,11 +109,15 @@ public class Menu extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(251, 251, 251)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(Mantenimiento_BTN, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(Mantenimiento_BTN, javax.swing.GroupLayout.DEFAULT_SIZE, 355, Short.MAX_VALUE)
                             .addComponent(Activos_BTN, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(Biblioteca_BTN, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(Contabilidad_BTN, javax.swing.GroupLayout.PREFERRED_SIZE, 345, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(263, Short.MAX_VALUE))
+                            .addComponent(Contabilidad_BTN, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 138, Short.MAX_VALUE)
+                .addComponent(btnUsuarios, javax.swing.GroupLayout.PREFERRED_SIZE, 609, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(112, 112, 112))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -101,7 +132,9 @@ public class Menu extends javax.swing.JFrame {
                 .addComponent(Biblioteca_BTN)
                 .addGap(18, 18, 18)
                 .addComponent(Contabilidad_BTN)
-                .addContainerGap(44, Short.MAX_VALUE))
+                .addGap(27, 27, 27)
+                .addComponent(btnUsuarios, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(46, Short.MAX_VALUE))
         );
 
         pack();
@@ -136,6 +169,12 @@ public class Menu extends javax.swing.JFrame {
         ventana.setLocationRelativeTo(null);
         ventana.setVisible(true);
     }//GEN-LAST:event_Biblioteca_BTNActionPerformed
+
+    private void btnUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUsuariosActionPerformed
+        // TODO add your handling code here:
+    CreateAccount ventana = new CreateAccount();
+    ventana.setVisible(true);
+    }//GEN-LAST:event_btnUsuariosActionPerformed
 
     /**
      * @param args the command line arguments
@@ -177,6 +216,7 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JButton Biblioteca_BTN;
     private javax.swing.JButton Contabilidad_BTN;
     private javax.swing.JButton Mantenimiento_BTN;
+    private javax.swing.JButton btnUsuarios;
     private javax.swing.JLabel jLabel1;
     // End of variables declaration//GEN-END:variables
 }

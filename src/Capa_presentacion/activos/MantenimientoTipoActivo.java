@@ -85,7 +85,7 @@ public class MantenimientoTipoActivo extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         tblActividad = new javax.swing.JTable();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 48)); // NOI18N
         jLabel3.setText("Tipo Activo");

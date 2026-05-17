@@ -42,7 +42,7 @@ public class MenuActivos extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         btnTipoActivo.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
         btnTipoActivo.setText("Tipo de Activo");

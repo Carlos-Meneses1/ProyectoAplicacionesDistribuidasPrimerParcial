@@ -170,7 +170,7 @@ private void seleccionarTipoActivo(String codigo) {
         txtValorCompra1 = new javax.swing.JTextField();
         cmbTipoActivo1 = new javax.swing.JComboBox<>();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 48)); // NOI18N
         jLabel1.setText("Activos depreciables");

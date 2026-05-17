@@ -86,7 +86,7 @@ public class MantenimientoTipoCuenta extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         tblTipoCuenta = new javax.swing.JTable();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 48)); // NOI18N
         jLabel1.setText("Gestión de tipos de cuenta");
